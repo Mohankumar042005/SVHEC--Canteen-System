@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Manage Menu{% endblock %}
+{% block content %}
+<h2>Manage Menu</h2>
+
+<div class="form-card" style="max-width:520px; margin:0 0 30px">
+  <h3>Add New Item</h3>
+  <form method="POST" action="{{ url_for('admin_menu_add') }}">
+    <label for="name">Item Name</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="category">Category</label>
+    <select id="category" name="category" required>
+      <option value="food">Food &amp; Snacks</option>
+      <option value="stationery">Stationery</option>
+    </select>
+
+    <label for="price">Price (&#8377;)</label>
+    <input type="number" id="price" name="price" step="0.01" min="0" required>
+
+    <button class="btn btn-primary btn-block" style="margin-top:20px" type="submit">Add Item</button>
+  </form>
+</div>
+
+<table>
+  <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Available</th><th></th></tr></thead>
+  <tbody>
+    {% for item in items %}
+    <tr>
+      <td>{{ item.name }}</td>
+      <td>{{ 'Food & Snacks' if item.category == 'food' else 'Stationery' }}</td>
+      <td class="mono">&#8377;{{ '%.2f'|format(item.price) }}</td>
+      <td>{{ 'Yes' if item.available else 'No' }}</td>
+      <td style="display:flex; gap:6px">
+        <form method="POST" action="{{ url_for('admin_menu_toggle', item_id=item.id) }}">
+          <button class="btn btn-sm btn-outline" style="color:var(--green-dark); border-color:var(--line)" type="submit">
+            {{ 'Hide' if item.available else 'Show' }}
+          </button>
+        </form>
+        <form method="POST" action="{{ url_for('admin_menu_delete', item_id=item.id) }}" onsubmit="return confirm('Delete this item?')">
+          <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

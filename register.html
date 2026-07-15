@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Register - SVHEC Canteen{% endblock %}
+{% block content %}
+<div class="form-card">
+  <h2>Create Student Account</h2>
+  <p class="helper">Use your college ID number to register.</p>
+  <form method="POST" action="{{ url_for('register') }}">
+    <label for="name">Full Name</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="roll_no">Student ID Number</label>
+    <input type="text" id="roll_no" name="roll_no" required placeholder="e.g. 22CS045">
+
+    <label for="department">Department</label>
+    <input type="text" id="department" name="department" placeholder="e.g. CSE">
+
+    <label for="classroom">Usual Classroom / Room No.</label>
+    <input type="text" id="classroom" name="classroom" placeholder="e.g. Block A - Room 204">
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required>
+
+    <button class="btn btn-primary btn-block" style="margin-top:20px" type="submit">Create Account</button>
+  </form>
+  <p class="helper" style="margin-top:16px">Already registered? <a href="{{ url_for('login') }}">Log in</a></p>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Cart - SVHEC Canteen{% endblock %}
+{% block content %}
+<h2>Your Cart</h2>
+
+{% if not cart_items %}
+<div class="card empty-state">
+  <p>Your cart is empty.</p>
+  <a class="btn btn-primary" href="{{ url_for('menu') }}">Browse Menu</a>
+</div>
+{% else %}
+<table>
+  <thead>
+    <tr><th>Item</th><th>Price</th><th>Qty</th><th>Subtotal</th><th></th></tr>
+  </thead>
+  <tbody>
+    {% for row in cart_items %}
+    <tr>
+      <td>{{ row.item.name }}</td>
+      <td class="mono">&#8377;{{ '%.2f'|format(row.item.price) }}</td>
+      <td>
+        <form class="qty-form" method="POST" action="{{ url_for('update_cart', item_id=row.item.id) }}">
+          <input type="number" name="quantity" min="0" value="{{ row.qty }}">
+          <button class="btn btn-sm btn-dark" type="submit">Update</button>
+        </form>
+      </td>
+      <td class="mono">&#8377;{{ '%.2f'|format(row.subtotal) }}</td>
+      <td><a class="btn btn-sm btn-danger" href="{{ url_for('remove_from_cart', item_id=row.item.id) }}">Remove</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="form-card" style="margin-top:26px">
+  <h3>Checkout</h3>
+  <p class="helper">Total: <strong class="mono">&#8377;{{ '%.2f'|format(total) }}</strong></p>
+  <form method="POST" action="{{ url_for('checkout') }}">
+    <label for="time_slot">Delivery Time Slot</label>
+    <select id="time_slot" name="time_slot" required>
+      {% for slot in time_slots %}
+      <option value="{{ slot }}">{{ slot }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="classroom">Deliver to Classroom / Room No.</label>
+    <input type="text" id="classroom" name="classroom" value="{{ student.classroom or '' }}" required>
+
+    <button class="btn btn-primary btn-block" style="margin-top:20px" type="submit">Place Order</button>
+  </form>
+</div>
+{% endif %}
+{% endblock %}

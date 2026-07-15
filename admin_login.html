@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Admin Login{% endblock %}
+{% block content %}
+<div class="form-card">
+  <h2>Canteen Admin Login</h2>
+  <form method="POST" action="{{ url_for('admin_login') }}">
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" required>
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required>
+    <button class="btn btn-primary btn-block" style="margin-top:20px" type="submit">Log In</button>
+  </form>
+  <p class="helper" style="margin-top:16px">Default demo login: <span class="mono">admin / admin123</span></p>
+</div>
+{% endblock %}

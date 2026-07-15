@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}SVHEC Canteen{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav class="navbar">
+  <div class="container">
+    <a class="brand" href="{{ url_for('index') }}">SVHEC Canteen
+      <small>Order &amp; Classroom Delivery</small>
+    </a>
+    <div class="nav-links">
+      {% if session.get('is_admin') %}
+        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('admin_menu') }}">Menu</a>
+        <a href="{{ url_for('admin_logout') }}">Log out</a>
+      {% elif student %}
+        <a href="{{ url_for('menu') }}">Menu</a>
+        <a href="{{ url_for('order_history') }}">My Orders</a>
+        <a href="{{ url_for('cart_view') }}">Cart{% if cart_count %} <span class="cart-pill">{{ cart_count }}</span>{% endif %}</a>
+        <a href="{{ url_for('logout') }}">Log out ({{ student.name.split(' ')[0] }})</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">Student Login</a>
+        <a href="{{ url_for('register') }}">Register</a>
+        <a href="{{ url_for('admin_login') }}">Admin</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+<main class="container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+<footer>SVHEC Canteen Order &amp; Classroom Delivery System &mdash; student mini project</footer>
+</body>
+</html>

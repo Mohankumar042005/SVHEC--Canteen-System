@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}My Orders{% endblock %}
+{% block content %}
+<h2>My Orders</h2>
+{% if not orders %}
+<div class="card empty-state">
+  <p>You haven't placed any orders yet.</p>
+  <a class="btn btn-primary" href="{{ url_for('menu') }}">Browse Menu</a>
+</div>
+{% else %}
+<table>
+  <thead><tr><th>Order</th><th>Time Slot</th><th>Total</th><th>Status</th><th>Placed On</th><th></th></tr></thead>
+  <tbody>
+    {% for order in orders %}
+    <tr>
+      <td class="mono">#{{ order.order_code }}</td>
+      <td>{{ order.time_slot }}</td>
+      <td class="mono">&#8377;{{ '%.2f'|format(order.total_amount) }}</td>
+      <td>
+        <span class="badge
+          {% if order.status == 'Placed' %}badge-placed
+          {% elif order.status == 'Preparing' %}badge-preparing
+          {% elif order.status == 'Out for Delivery' %}badge-out
+          {% else %}badge-delivered{% endif %}">{{ order.status }}</span>
+      </td>
+      <td>{{ order.created_at.strftime('%d %b, %I:%M %p') }}</td>
+      <td><a class="btn btn-sm btn-dark" href="{{ url_for('order_detail', order_id=order.id) }}">View</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}SVHEC Canteen{% endblock %}
+{% block content %}
+<div class="hero">
+  <div class="eyebrow">No more queue &middot; No more waiting</div>
+  <h1>Order from the canteen. Get it delivered to your classroom.</h1>
+  <p>Browse today's food, snacks and stationery, pick a break time slot, and
+     your order reaches your classroom &mdash; no queue, no wasted break.</p>
+  <div class="hero-actions">
+    {% if student %}
+      <a class="btn btn-primary" href="{{ url_for('menu') }}">Browse Menu</a>
+      <a class="btn btn-outline" href="{{ url_for('order_history') }}">My Orders</a>
+    {% else %}
+      <a class="btn btn-primary" href="{{ url_for('register') }}">Create Student Account</a>
+      <a class="btn btn-outline" href="{{ url_for('login') }}">Log In</a>
+    {% endif %}
+  </div>
+</div>
+
+<div class="section-title"><h2>How it works</h2></div>
+<div class="grid">
+  <div class="card">
+    <h3>1. Order</h3>
+    <p class="helper">Log in with your ID number and choose items from the food or stationery menu.</p>
+  </div>
+  <div class="card">
+    <h3>2. Confirm</h3>
+    <p class="helper">Pick a permitted break time slot and your classroom &mdash; get an order code instantly.</p>
+  </div>
+  <div class="card">
+    <h3>3. Prepare</h3>
+    <p class="helper">Canteen staff see your order on the admin panel and start preparing it.</p>
+  </div>
+  <div class="card">
+    <h3>4. Deliver</h3>
+    <p class="helper">Track live status &mdash; Placed, Preparing, Out for Delivery, Delivered.</p>
+  </div>
+</div>
+{% endblock %}

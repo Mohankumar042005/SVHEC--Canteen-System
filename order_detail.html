@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Order {{ order.order_code }}{% endblock %}
+{% block content %}
+<h2>Order Status</h2>
+<div class="ticket">
+  <div class="ticket-head">
+    <span>SVHEC Canteen</span>
+    <span class="code">#{{ order.order_code }}</span>
+  </div>
+  <div class="perforation"></div>
+  <div class="ticket-body">
+    <dl>
+      <dt>Placed by</dt><dd>{{ order.student.name }} ({{ order.student.roll_no }})</dd>
+      <dt>Time slot</dt><dd>{{ order.time_slot }}</dd>
+      <dt>Deliver to</dt><dd>{{ order.classroom }}</dd>
+      <dt>Total</dt><dd class="mono">&#8377;{{ '%.2f'|format(order.total_amount) }}</dd>
+      <dt>Ordered on</dt><dd>{{ order.created_at.strftime('%d %b %Y, %I:%M %p') }}</dd>
+    </dl>
+
+    <table>
+      <thead><tr><th>Item</th><th>Qty</th><th>Price</th></tr></thead>
+      <tbody>
+        {% for it in order.items %}
+        <tr><td>{{ it.name }}</td><td>{{ it.quantity }}</td><td class="mono">&#8377;{{ '%.2f'|format(it.price * it.quantity) }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <ul class="track">
+      {% for step in status_flow %}
+      {% set step_idx = status_flow.index(step) %}
+      {% set current_idx = status_flow.index(order.status) %}
+      <li class="{% if step_idx < current_idx %}done{% elif step_idx == current_idx %}current{% endif %}">
+        <span class="dot"></span> {{ step }}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+<p style="text-align:center; margin-top:20px">
+  <a class="btn btn-outline" style="color:var(--green-dark); border-color:var(--line)" href="{{ url_for('order_history') }}">Back to My Orders</a>
+</p>
+{% endblock %}

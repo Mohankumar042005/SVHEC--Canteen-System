@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Menu - SVHEC Canteen{% endblock %}
+{% block content %}
+<h2>Today's Menu</h2>
+<p class="helper">Add items to your cart, then choose a delivery time slot at checkout.</p>
+
+<div class="section-title">
+  <h3>Food &amp; Snacks</h3>
+  <span class="count">{{ food_items|length }} items</span>
+</div>
+<div class="grid">
+  {% for item in food_items %}
+  <div class="card item-card">
+    <span class="name">{{ item.name }}</span>
+    <span class="price">&#8377;{{ '%.2f'|format(item.price) }}</span>
+    <form method="POST" action="{{ url_for('add_to_cart', item_id=item.id) }}">
+      <button class="btn btn-dark btn-sm btn-block" type="submit">Add to Cart</button>
+    </form>
+  </div>
+  {% else %}
+  <p class="helper">No food items available right now.</p>
+  {% endfor %}
+</div>
+
+<div class="section-title">
+  <h3>Stationery</h3>
+  <span class="count">{{ stationery_items|length }} items</span>
+</div>
+<div class="grid">
+  {% for item in stationery_items %}
+  <div class="card item-card">
+    <span class="name">{{ item.name }}</span>
+    <span class="price">&#8377;{{ '%.2f'|format(item.price) }}</span>
+    <form method="POST" action="{{ url_for('add_to_cart', item_id=item.id) }}">
+      <button class="btn btn-dark btn-sm btn-block" type="submit">Add to Cart</button>
+    </form>
+  </div>
+  {% else %}
+  <p class="helper">No stationery items available right now.</p>
+  {% endfor %}
+</div>
+{% endblock %}

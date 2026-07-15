@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<h2>Canteen Admin Dashboard</h2>
+
+<div style="margin-bottom:18px">
+  <a class="btn btn-sm {% if not status_filter %}btn-dark{% else %}btn-outline{% endif %}" style="{% if not status_filter %}{% else %}color:var(--green-dark); border-color:var(--line){% endif %}" href="{{ url_for('admin_dashboard') }}">All</a>
+  {% for s in status_flow %}
+  <a class="btn btn-sm {% if status_filter == s %}btn-dark{% else %}btn-outline{% endif %}" style="{% if status_filter == s %}{% else %}color:var(--green-dark); border-color:var(--line){% endif %}" href="{{ url_for('admin_dashboard', status=s) }}">{{ s }}</a>
+  {% endfor %}
+</div>
+
+{% if not orders %}
+<div class="card empty-state"><p>No orders found.</p></div>
+{% else %}
+<table>
+  <thead><tr><th>Order</th><th>Student</th><th>Time Slot</th><th>Room</th><th>Total</th><th>Status</th><th>Update</th></tr></thead>
+  <tbody>
+    {% for order in orders %}
+    <tr>
+      <td class="mono">#{{ order.order_code }}</td>
+      <td>{{ order.student.name }} ({{ order.student.roll_no }})</td>
+      <td>{{ order.time_slot }}</td>
+      <td>{{ order.classroom }}</td>
+      <td class="mono">&#8377;{{ '%.2f'|format(order.total_amount) }}</td>
+      <td>
+        <span class="badge
+          {% if order.status == 'Placed' %}badge-placed
+          {% elif order.status == 'Preparing' %}badge-preparing
+          {% elif order.status == 'Out for Delivery' %}badge-out
+          {% else %}badge-delivered{% endif %}">{{ order.status }}</span>
+      </td>
+      <td>
+        <form method="POST" action="{{ url_for('update_order_status', order_id=order.id) }}" style="display:flex; gap:6px">
+          <select name="status">
+            {% for s in status_flow %}
+            <option value="{{ s }}" {% if order.status == s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+          </select>
+          <button class="btn btn-sm btn-dark" type="submit">Save</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}
